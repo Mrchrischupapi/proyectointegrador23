@@ -9,7 +9,7 @@ RUN cp "Proyecto integrador original/proyectointegrador/proyectointegrador/targe
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 COPY --from=build /app/app.jar app.jar
-# Copia la carpeta wallet directamente a la ruta /app/wallet en la imagen final
-COPY --from=build "/app/Proyecto integrador original/proyectointegrador/proyectointegrador/src/main/resources/wallet" /app/wallet
+# Copia la carpeta wallet usando sintaxis JSON para soportar espacios
+COPY --from=build ["/app/Proyecto integrador original/proyectointegrador/proyectointegrador/src/main/resources/wallet", "/app/wallet"]
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]

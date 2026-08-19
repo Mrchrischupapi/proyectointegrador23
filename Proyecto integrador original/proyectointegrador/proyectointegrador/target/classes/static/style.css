@@ -1,0 +1,222 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #1e1e1e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Contenedor Azul Exterior */
+.outer-background {
+    background-color: #1b36a8;
+    width: 90%;
+    max-width: 1100px;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Tarjeta Principal */
+.card-container {
+    background-color: #ffffff;
+    width: 100%;
+    display: flex;
+    min-height: 520px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+/* Panel Izquierdo */
+.left-panel {
+    background-color: #6b8bb8;
+    width: 45%;
+    padding: 50px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+}
+
+.welcome-text {
+    color: #ffffff;
+    font-size: 2.2rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-top: 60px;
+}
+
+.logo-box {
+    background-color: #ffffff;
+    width: 170px;
+    height: 170px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.logo-placeholder {
+    text-align: center;
+}
+
+.logo-icon {
+    font-size: 3rem;
+    background: linear-gradient(45deg, #7b2cbf, #00b4d8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2b2b2b;
+    margin-top: -5px;
+}
+
+/* Panel Derecho */
+.right-panel {
+    width: 55%;
+    padding: 45px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.right-panel h2 {
+    font-size: 1.3rem;
+    color: #222222;
+    letter-spacing: 0.5px;
+}
+
+.subtitle {
+    color: #b0b0b0;
+    font-size: 0.95rem;
+    margin-top: 5px;
+    margin-bottom: 25px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 1rem;
+    color: #222222;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #777777;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    outline: none;
+}
+
+.form-group input::placeholder {
+    color: #cccccc;
+}
+
+.options-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    margin-bottom: 8px;
+}
+
+.remember-me {
+    color: #333333;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.register-link {
+    color: #333333;
+}
+
+.register-link a {
+    color: #0084ff;
+    text-decoration: underline;
+}
+
+.forgot-row {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.forgot-row a {
+    color: #0084ff;
+    font-size: 0.75rem;
+    text-decoration: underline;
+}
+
+/* Botón de Submit */
+.btn-submit {
+    width: 65%;
+    margin: 0 auto;
+    display: block;
+    background-color: #0066c0;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+.btn-submit:hover {
+    background-color: #005299;
+}
+
+/* Divisor OR */
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0 15px 0;
+    color: #666666;
+    font-size: 0.75rem;
+}
+
+.divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #cccccc;
+}
+
+.divider span {
+    padding: 0 10px;
+}
+
+/* Redes Sociales */
+.social-login {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+}
+
+.btn-social {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.btn-social.google { color: #ea4335; }
+.btn-social.apple { color: #000000; }

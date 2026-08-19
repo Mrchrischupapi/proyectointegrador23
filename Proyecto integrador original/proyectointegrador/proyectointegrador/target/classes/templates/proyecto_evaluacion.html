@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación UX Vibe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; min-height: 100vh; background-color: #ffffff; color: #333; }
+        .layout-container { display: flex; width: 100vw; min-height: 100vh; }
+        .sidebar-left { width: 320px; background-color: #6b89b4; display: flex; flex-direction: column; padding: 25px; position: relative; flex-shrink: 0; }
+        .logo-box { background-color: #ffffff; padding: 12px 20px; border-radius: 8px; width: fit-content; display: flex; align-items: center; justify-content: center; }
+        .logo-text { font-size: 26px; font-weight: bold; color: #702cb8; }
+        .logo-text span { color: #00ca99; }
+        .shield-illustration { margin: auto; display: flex; justify-content: center; align-items: center; }
+        .big-shield { width: 200px; height: 240px; background: linear-gradient(135deg, #a4c4f4 0%, #4a82e4 100%); clip-path: polygon(50% 0%, 100% 15%, 100% 70%, 50% 100%, 0% 70%, 0% 15%); display: flex; justify-content: center; align-items: center; box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+        .big-shield-inner { width: 170px; height: 210px; background: linear-gradient(135deg, #d2e4ff 0%, #83b0f5 100%); clip-path: polygon(50% 0%, 100% 15%, 100% 70%, 50% 100%, 0% 70%, 0% 15%); display: flex; justify-content: center; align-items: center; }
+        .big-shield i { font-size: 75px; color: #ffffff; }
+        .main-content { flex: 1; padding: 40px 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .header-section { text-align: center; margin-bottom: 25px; }
+        .header-title-box { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 6px; }
+        .header-icon { width: 50px; height: 55px; background: linear-gradient(135deg, #a4c4f4 0%, #3a75e0 100%); clip-path: polygon(50% 0%, 100% 15%, 100% 70%, 50% 100%, 0% 70%, 0% 15%); display: flex; justify-content: center; align-items: center; color: white; font-size: 20px; }
+        .header-title-box h1 { font-family: Georgia, serif; font-size: 38px; font-weight: normal; color: #1a1a1a; }
+        .header-subtitle { font-family: Georgia, serif; font-size: 20px; color: #a0a0a0; }
+        .terms-card { background-color: #6b89b4; color: #ffffff; border-radius: 12px; padding: 30px 35px; max-width: 850px; width: 100%; font-size: 13px; line-height: 1.5; max-height: 380px; overflow-y: auto; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); }
+        .terms-card h3 { font-size: 14px; font-weight: bold; margin-top: 12px; margin-bottom: 4px; }
+        .terms-card p, .terms-card ul { margin-bottom: 10px; }
+        .terms-card ul { padding-left: 20px; }
+        .checkbox-container { display: flex; align-items: center; gap: 15px; margin-top: 30px; margin-bottom: 25px; }
+        .custom-checkbox { width: 32px; height: 32px; border: 2px solid #555555; background-color: #ffffff; cursor: pointer; appearance: none; -webkit-appearance: none; display: grid; place-content: center; border-radius: 2px; }
+        .custom-checkbox::before { content: ""; width: 18px; height: 18px; transform: scale(0); transition: 120ms transform ease-in-out; box-shadow: inset 1em 1em #0056e0; clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%); }
+        .custom-checkbox:checked::before { transform: scale(1); }
+        .checkbox-label { font-family: Georgia, serif; font-size: 26px; color: #000000; user-select: none; cursor: pointer; }
+        .btn-iniciar { background-color: #0066c4; color: #ffffff; border: none; padding: 12px 70px; border-radius: 30px; font-family: Georgia, serif; font-size: 22px; cursor: pointer; transition: background-color 0.2s, opacity 0.2s; }
+        .btn-iniciar:hover { background-color: #004da3; }
+        .btn-iniciar:disabled { background-color: #a0a0a0; cursor: not-allowed; opacity: 0.7; }
+        .survey-container { width: 100%; max-width: 1050px; margin: 0 auto; padding: 20px 30px; display: flex; flex-direction: column; min-height: 100vh; }
+        .survey-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
+        .survey-header-left { display: flex; align-items: center; gap: 40px; }
+        .survey-title { font-family: Georgia, serif; font-size: 32px; color: #000000; font-weight: normal; }
+        .instruction-banner { background-color: #6b89b4; color: #ffffff; padding: 12px 20px; font-family: Georgia, serif; font-size: 20px; line-height: 1.3; margin-bottom: 25px; }
+        .instruction-banner-danger { background-color: #b84c4c; color: #ffffff; padding: 12px 20px; font-family: Georgia, serif; font-size: 18px; line-height: 1.3; margin-bottom: 25px; text-align: center; font-weight: bold; }
+        .questions-list { display: flex; flex-direction: column; gap: 22px; flex-grow: 1; }
+        .question-item { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+        .question-text-box { display: flex; align-items: center; gap: 15px; flex: 1; }
+        .question-number { width: 32px; height: 32px; background-color: #0056e0; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; flex-shrink: 0; }
+        .question-text { font-family: Georgia, serif; font-size: 18px; color: #000000; line-height: 1.3; }
+        .likert-scale { display: flex; gap: 16px; align-items: center; flex-shrink: 0; }
+        .likert-option { position: relative; }
+        .likert-option input[type="radio"] { display: none; }
+        .likert-circle { width: 38px; height: 38px; border-radius: 50%; background-color: #d8d8d8; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background-color 0.2s, transform 0.1s; }
+        .likert-circle:hover { background-color: #b8b8b8; }
+        .likert-option input[type="radio"]:checked + .likert-circle { background-color: #0056e0; box-shadow: 0 0 0 3px rgba(0, 86, 224, 0.3); }
+        .satisfaction-box { border: 3px solid #00a2ff; padding: 20px 30px; border-radius: 4px; margin-bottom: 20px; }
+        .satisfaction-title { font-family: Georgia, serif; font-size: 24px; color: #000000; margin-bottom: 20px; }
+        .sam-img-container { width: 100%; text-align: center; margin-bottom: 15px; }
+        .sam-img-container img { max-width: 100%; height: auto; }
+        .sam-selector-grid { display: flex; justify-content: space-between; align-items: center; max-width: 850px; margin: 0 auto; padding: 0 10px; }
+        .sam-option { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+        .sam-option input[type="radio"] { display: none; }
+        .sam-btn-num { width: 45px; height: 45px; border: 2px solid #0056e0; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: Georgia, serif; font-size: 20px; font-weight: bold; color: #0056e0; background-color: #ffffff; transition: all 0.2s; }
+        .sam-option:hover .sam-btn-num { background-color: #e6f0ff; }
+        .sam-option input[type="radio"]:checked + .sam-btn-num { background-color: #0056e0; color: #ffffff; box-shadow: 0 4px 8px rgba(0, 86, 224, 0.3); }
+        .success-card-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; margin: 20px 0; }
+        .success-card { border: 2px solid #3b7bbd; width: 100%; max-width: 850px; background-color: #ffffff; border-radius: 4px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .success-card-header { background-color: #6b89b4; color: #ffffff; padding: 12px 25px; font-family: Georgia, serif; font-size: 16px; }
+        .success-card-body { padding: 60px 40px; display: flex; align-items: center; justify-content: center; gap: 60px; }
+        .check-circle-icon { width: 180px; height: 180px; border-radius: 50%; background: linear-gradient(135deg, #42d263 0%, #22a041 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0,0,0,0.12); flex-shrink: 0; }
+        .check-circle-icon i { color: #ffffff; font-size: 100px; }
+        .success-title-text { font-family: Georgia, serif; font-size: 42px; color: #000000; line-height: 1.25; font-weight: normal; }
+        .survey-actions { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 25px; padding-bottom: 20px; }
+        .btn-nav-red { background-color: #ff7b7b; color: white; border: none; padding: 12px 65px; border-radius: 30px; font-family: Georgia, serif; font-size: 22px; cursor: pointer; transition: background-color 0.2s; }
+        .btn-nav-green { background-color: #52c480; color: white; border: none; padding: 12px 65px; border-radius: 30px; font-family: Georgia, serif; font-size: 22px; cursor: pointer; transition: background-color 0.2s; }
+        .btn-nav-red:hover { background-color: #ef5353; }
+        .btn-nav-green:hover { background-color: #3fba70; }
+        .input-form { width: 100%; padding: 12px 15px; border: 2px solid #6b89b4; border-radius: 8px; font-family: 'Segoe UI', sans-serif; font-size: 16px; outline: none; }
+    </style>
+</head>
+<body>
+
+<div id="cuestionarioApp">
+
+    <div id="viewPrivacy" class="layout-container">
+        <aside class="sidebar-left">
+            <div class="logo-box"><div class="logo-text">UX <span>vibe</span></div></div>
+            <div class="shield-illustration">
+                <div class="big-shield"><div class="big-shield-inner"><i class="fa-solid fa-lock"></i></div></div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="header-section">
+                <div class="header-title-box">
+                    <div class="header-icon"><i class="fa-solid fa-lock"></i></div>
+                    <h1>Aviso de privacidad</h1>
+                </div>
+                <p class="header-subtitle">Tu privacidad es importante para nosotros.</p>
+            </header>
+
+            <section class="terms-card">
+                <p>En cumplimiento con la Ley Federal de Protección de Datos Personales en Posesión de los Particulares, ponemos a su disposición el presente Aviso de Privacidad para informarle sobre la recolección, uso y protección de sus datos personales.</p>
+                <h3>1. Identidad y Domicilio del Responsable</h3>
+                <p>UX Vibe es responsable de recabar sus datos personales, del uso que se le dé a los mismos y de su protección.</p>
+                <h3>2. Datos Personales Recabados</h3>
+                <p>Para llevar a cabo las finalidades descritas en este aviso, recabaremos los siguientes datos:</p>
+                <ul>
+                    <li>Nombre completo</li>
+                    <li>Sexo</li>
+                    <li>Edad</li>
+                    <li>Correo electrónico</li>
+                    <li>Respuestas de la evaluación y grabación de audio para fines metodológicos.</li>
+                </ul>
+                <h3>3. Finalidades del Tratamiento de Datos</h3>
+                <p>Los datos recabados serán utilizados con el único propósito de evaluar la experiencia de usuario (UX), análisis estadístico de satisfacción e investigación académica y técnica para la mejora continua del sistema.</p>
+                <h3>4. Protección y Confidencialidad</h3>
+                <p>Nos comprometemos a mantener las medidas de seguridad administrativas, técnicas y físicas necesarias para proteger sus datos personales contra daño, pérdida, alteración o tratamiento no autorizado.</p>
+            </section>
+
+            <div class="checkbox-container">
+                <input type="checkbox" id="checkTerminos" class="custom-checkbox" onchange="validarAceptacion()">
+                <label for="checkTerminos" class="checkbox-label">Acepto términos y condiciones</label>
+            </div>
+
+            <button type="button" id="btnIniciar" class="btn-iniciar" disabled onclick="iniciarEvaluacion()">Iniciar</button>
+        </main>
+    </div>
+
+    <div id="viewPersonalData" class="survey-container" style="display: none;">
+        <header class="survey-header">
+            <div class="survey-header-left">
+                <div class="logo-box"><div class="logo-text">UX <span>vibe</span></div></div>
+                <h1 class="survey-title">Tus Datos Personales</h1>
+            </div>
+        </header>
+
+        <div class="instruction-banner-danger">
+            <i class="fa-solid fa-circle-exclamation"></i> TODOS LOS CAMPOS SON OBLIGATORIOS PARA CONTINUAR
+        </div>
+
+        <div class="questions-list" style="max-width: 600px; margin: 0 auto; width: 100%;">
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label for="nombre" class="question-text" style="font-weight: bold;">Nombre completo:</label>
+                <input type="text" id="nombre" class="input-form" placeholder="Escribe tu nombre">
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 15px;">
+                <label for="sexo" class="question-text" style="font-weight: bold;">Sexo:</label>
+                <select id="sexo" class="input-form">
+                    <option value="" disabled selected>Selecciona una opción</option>
+                    <option value="Femenino">Femenino</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Otro">Otro</option>
+                    <option value="Prefiero no decir">Prefiero no decir</option>
+                </select>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 15px;">
+                <label for="edad" class="question-text" style="font-weight: bold;">Edad:</label>
+                <input type="number" id="edad" class="input-form" placeholder="Ej. 25" min="1" max="120">
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 15px;">
+                <label for="correo" class="question-text" style="font-weight: bold;">Correo electrónico:</label>
+                <input type="email" id="correo" class="input-form" placeholder="correo@ejemplo.com">
+            </div>
+        </div>
+
+        <div class="survey-actions" style="margin-top: 30px;">
+            <button type="button" class="btn-nav-red" onclick="mostrarPantalla('viewPrivacy')">Atrás</button>
+            <button type="button" class="btn-nav-green" onclick="validarDatosPersonales()">Siguiente</button>
+        </div>
+    </div>
+
+    <div id="viewSurvey1" class="survey-container" style="display: none;">
+        <header class="survey-header">
+            <div class="survey-header-left">
+                <div class="logo-box"><div class="logo-text">UX <span>vibe</span></div></div>
+                <h1 class="survey-title">Cuestionario de Experiencia de Usuario</h1>
+            </div>
+        </header>
+
+        <div class="instruction-banner">Valora cada opción de 1 a 5</div>
+
+        <div class="questions-list">
+            <div class="question-item" th:each="i : ${#numbers.sequence(1, 7)}">
+                <div class="question-text-box">
+                    <div class="question-number" th:text="${i}">1</div>
+                    <div class="question-text" th:id="'pText' + ${i}">Pregunta evaluativa...</div>
+                </div>
+                <div class="likert-scale">
+                    <label class="likert-option" th:each="val : ${#numbers.sequence(1, 5)}">
+                        <input type="radio" th:name="'p' + ${i}" th:value="${val}">
+                        <span class="likert-circle"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="survey-actions">
+            <button type="button" class="btn-nav-red" onclick="mostrarPantalla('viewPersonalData')">Atrás</button>
+            <button type="button" class="btn-nav-green" onclick="validarYContinuar('viewSurvey2', 1, 7)">Siguiente</button>
+        </div>
+    </div>
+
+    <div id="viewSurvey2" class="survey-container" style="display: none;">
+        <header class="survey-header" style="justify-content: flex-end;">
+            <div class="logo-box"><div class="logo-text">UX <span>vibe</span></div></div>
+        </header>
+
+        <div class="instruction-banner">Valora cada opción de 1 a 5</div>
+
+        <div class="questions-list">
+            <div class="question-item" th:each="i : ${#numbers.sequence(8, 15)}">
+                <div class="question-text-box">
+                    <div class="question-number" th:text="${i}">8</div>
+                    <div class="question-text" th:id="'pText' + ${i}">Pregunta evaluativa...</div>
+                </div>
+                <div class="likert-scale">
+                    <label class="likert-option" th:each="val : ${#numbers.sequence(1, 5)}">
+                        <input type="radio" th:name="'p' + ${i}" th:value="${val}">
+                        <span class="likert-circle"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="survey-actions">
+            <button type="button" class="btn-nav-red" onclick="mostrarPantalla('viewSurvey1')">Atrás</button>
+            <button type="button" class="btn-nav-green" onclick="validarYContinuar('viewSurvey3', 8, 15)">Siguiente</button>
+        </div>
+    </div>
+
+    <div id="viewSurvey3" class="survey-container" style="display: none;">
+        <header class="survey-header" style="justify-content: space-between;">
+            <h1 class="survey-title">Cuestionario UX</h1>
+            <div class="logo-box"><div class="logo-text">UX <span>vibe</span></div></div>
+        </header>
+
+        <div class="satisfaction-box">
+            <h2 class="satisfaction-title">Dominio: Escala 1 a 9</h2>
+            <div class="sam-img-container"><img th:src="@{/Imagenes/1SAM.png}" src="/Imagenes/1SAM.png" alt="SAM Dominio"></div>
+
+            <div class="sam-selector-grid">
+                <label class="sam-option" th:each="val : ${#numbers.sequence(1, 9)}">
+                    <input type="radio" name="dominio" th:value="${val}">
+                    <div class="sam-btn-num" th:text="${val}">1</div>
+                </label>
+            </div>
+        </div>
+
+        <div class="survey-actions">
+            <button type="button" class="btn-nav-red" onclick="mostrarPantalla('viewSurvey2')">Atrás</button>
+            <button type="button" class="btn-nav-green" onclick="validarSeleccionIndividual('dominio', 'viewSurvey4')">Siguiente</button>
+        </div>
+    </div>
+
+    <div id="viewSurvey4" class="survey-container" style="display: none;">
+        <header class="survey-header" style="justify-content: space-between;">
+            <h1 class="survey-title">Cuestionario UX</h1>
+            <div class="logo-box"><div class="logo-text">UX <span>vibe</span></div></div>
+        </header>
+
+        <div class="satisfaction-box">
+            <h2 class="satisfaction-title">Activación: Escala 1 a 9</h2>
+            <div class="sam-img-container"><img th:src="@{/Imagenes/2SAM.png}" src="/Imagenes/2SAM.png" alt="SAM Activacion"></div>
+
+            <div class="sam-selector-grid">
+                <label class="sam-option" th:each="val : ${#numbers.sequence(1, 9)}">
+                    <input type="radio" name="activacion" th:value="${val}">
+                    <div class="sam-btn-num" th:text="${val}">1</div>
+                </label>
+            </div>
+        </div>
+
+        <div class="survey-actions">
+            <button type="button" class="btn-nav-red" onclick="mostrarPantalla('viewSurvey3')">Atrás</button>
+            <button type="button" class="btn-nav-green" onclick="validarSeleccionIndividual('activacion', 'viewSurvey5')">Siguiente</button>
+        </div>
+    </div>
+
+    <div id="viewSurvey5" class="survey-container" style="display: none;">
+        <header class="survey-header" style="justify-content: space-between;">
+            <h1 class="survey-title">Cuestionario UX</h1>
+            <div class="logo-box"><div class="logo-text">UX <span>vibe</span></div></div>
+        </header>
+
+        <div class="satisfaction-box">
+            <h2 class="satisfaction-title">Valencia: Escala 1 a 9</h2>
+            <div class="sam-img-container"><img th:src="@{/Imagenes/3SAM.png}" src="/Imagenes/3SAM.png" alt="SAM Valencia"></div>
+
+            <div class="sam-selector-grid">
+                <label class="sam-option" th:each="val : ${#numbers.sequence(1, 9)}">
+                    <input type="radio" name="valencia" th:value="${val}">
+                    <div class="sam-btn-num" th:text="${val}">1</div>
+                </label>
+            </div>
+        </div>
+
+        <div class="survey-actions">
+            <button type="button" class="btn-nav-red" onclick="mostrarPantalla('viewSurvey4')">Atrás</button>
+            <button type="button" id="btnEnviarFinal" class="btn-nav-green" onclick="enviarRespuestas()">Enviar</button>
+        </div>
+    </div>
+
+    <div id="viewSuccess" class="survey-container" style="display: none;">
+        <div class="success-card-wrapper">
+            <div class="success-card">
+                <div class="success-card-header">Encuesta Completada</div>
+                <div class="success-card-body">
+                    <div class="check-circle-icon"><i class="fa-solid fa-check"></i></div>
+                    <h2 class="success-title-text">¡Guardada con éxito!</h2>
+                </div>
+            </div>
+        </div>
+        <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+            <button type="button" class="btn-nav-red" onclick="redirigirDashboard()">Salir</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    let mediaRecorder = null;
+    let audioChunks = [];
+
+    const preguntas = [
+        "Me pareció fácil de usar esta aplicación.",
+        "Encuentro la interfaz innecesariamente compleja.",
+        "Pensé que el sistema era fácil de usar.",
+        "Creo que necesitaría el apoyo de un técnico para usar este sistema.",
+        "Encontré que las diversas funciones estaban bien integradas.",
+        "Pensé que había demasiada inconsistencia en este sistema.",
+        "Imagino que la mayoría de la gente aprendería a usar este sistema muy rápidamente.",
+        "Encontré el sistema muy pesado de usar.",
+        "Me sentí muy confiado al usar el sistema.",
+        "Necesité aprender muchas cosas antes de poder seguir adelante.",
+        "Las pantallas me resultaron claras y legibles.",
+        "La navegación entre secciones fue fluida.",
+        "El diseño visual me pareció atractivo.",
+        "El sistema respondió de forma rápida a mis acciones.",
+        "En general, estoy satisfecho con la experiencia de uso."
+    ];
+
+    document.addEventListener("DOMContentLoaded", () => {
+        preguntas.forEach((texto, index) => {
+            const el = document.getElementById(`pText${index + 1}`);
+            if (el) el.textContent = texto;
+        });
+    });
+
+    function validarAceptacion() {
+        document.getElementById('btnIniciar').disabled = !document.getElementById('checkTerminos').checked;
+    }
+
+    async function iniciarEvaluacion() {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                audioChunks = [];
+                mediaRecorder = new MediaRecorder(stream);
+
+                mediaRecorder.ondataavailable = e => {
+                    if (e.data && e.data.size > 0) {
+                        audioChunks.push(e.data);
+                    }
+                };
+                mediaRecorder.start();
+                console.log("Grabación iniciada correctamente.");
+            } catch (err) {
+                console.warn("Permiso denegado o dispositivo sin micrófono. Se omitirá el audio.", err);
+            }
+        }
+        mostrarPantalla('viewPersonalData');
+    }
+
+    function validarDatosPersonales() {
+        const nombre = document.getElementById('nombre').value.trim();
+        const sexo = document.getElementById('sexo').value;
+        const edad = document.getElementById('edad').value.trim();
+        const correo = document.getElementById('correo').value.trim();
+
+        if (!nombre || !sexo || !edad || !correo) {
+            alert('Todos los campos son obligatorios');
+            return;
+        }
+        mostrarPantalla('viewSurvey1');
+    }
+
+    function mostrarPantalla(id) {
+        const ids = ['viewPrivacy', 'viewPersonalData', 'viewSurvey1', 'viewSurvey2', 'viewSurvey3', 'viewSurvey4', 'viewSurvey5', 'viewSuccess'];
+        ids.forEach(p => document.getElementById(p).style.display = 'none');
+        document.getElementById(id).style.display = 'flex';
+        window.scrollTo(0, 0);
+    }
+
+    function validarYContinuar(siguiente, inicio, fin) {
+        for (let i = inicio; i <= fin; i++) {
+            if (!document.querySelector(`input[name="p${i}"]:checked`)) {
+                alert('Completa todas las preguntas');
+                return;
+            }
+        }
+        mostrarPantalla(siguiente);
+    }
+
+    function validarSeleccionIndividual(campo, siguiente) {
+        if (!document.querySelector(`input[name="${campo}"]:checked`)) {
+            alert('Selecciona una opción');
+            return;
+        }
+        mostrarPantalla(siguiente);
+    }
+
+    function redirigirDashboard() {
+        window.location.href = '/dashboard';
+    }
+
+    function detenerGrabacionAudio() {
+        return new Promise((resolve) => {
+            if (mediaRecorder && mediaRecorder.state !== "inactive") {
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    // Detener los tracks del micrófono
+                    if (mediaRecorder.stream) {
+                        mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                    }
+                    resolve(audioBlob);
+                };
+                mediaRecorder.stop();
+            } else {
+                resolve(null);
+            }
+        });
+    }
+
+    function blobToBase64(blob) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64String = reader.result.split(',')[1];
+                resolve(base64String);
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
+    }
+
+    async function enviarRespuestas() {
+        if (!document.querySelector('input[name="valencia"]:checked')) {
+            alert('Por favor completa el campo Valencia');
+            return;
+        }
+
+        const btn = document.getElementById('btnEnviarFinal');
+        btn.disabled = true;
+
+        try {
+            const audioBlob = await detenerGrabacionAudio();
+            let audioBase64String = null;
+
+            if (audioBlob && audioBlob.size > 0) {
+                audioBase64String = await blobToBase64(audioBlob);
+            }
+
+            const payload = {
+                nombre: document.getElementById('nombre').value,
+                sexo: document.getElementById('sexo').value,
+                edad: parseInt(document.getElementById('edad').value) || 0,
+                correo: document.getElementById('correo').value,
+                dominio: parseInt(document.querySelector('input[name="dominio"]:checked').value),
+                activacion: parseInt(document.querySelector('input[name="activacion"]:checked').value),
+                valencia: parseInt(document.querySelector('input[name="valencia"]:checked').value),
+                // CORRECCIÓN CLAVE: Nombre exacto según @JsonProperty("audio_grabado_base64") en Java
+                audio_grabado_base64: audioBase64String
+            };
+
+            for (let i = 1; i <= 15; i++) {
+                const rad = document.querySelector(`input[name="p${i}"]:checked`);
+                payload[`p${i}`] = rad ? parseInt(rad.value) : 0;
+            }
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const proyectoId = urlParams.get('proyectoId');
+            if (proyectoId) {
+                payload.proyectoId = parseInt(proyectoId);
+            }
+
+            const res = await fetch('/api/proyectos/evaluacion/guardar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+                mostrarPantalla('viewSuccess');
+            } else {
+                alert('Error al guardar datos. Código: ' + res.status);
+            }
+        } catch (e) {
+            console.error("Error al enviar la evaluación:", e);
+            alert('No se pudo conectar con el servidor.');
+        } finally {
+            btn.disabled = false;
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de sesion</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <!-- Iconos de Google y Apple -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div class="outer-background">
+    <div class="card-container">
+
+        <!-- Panel Izquierdo Azul -->
+        <div class="left-panel">
+            <div class="welcome-text">
+                BIENVENIDO A<br>UXVIBE!
+            </div>
+
+            <div class="logo-box">
+                <!-- Si tienes tu propio logo, reemplaza src por la ruta de tu imagen -->
+                <div class="logo-placeholder">
+                    <span class="logo-icon"><i class="fa-solid fa-infinity"></i></span>
+                    <div class="logo-text">ux vibe</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel Derecho Formulario -->
+        <div class="right-panel">
+            <h2>INICIO DE SESION</h2>
+            <p class="subtitle">Bienvenido de nuevo!</p>
+
+            <form th:action="@{/login}" method="post">
+
+                <div class="form-group">
+                    <label for="correo">Correo Electronico</label>
+                    <input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="password" placeholder="******************" required>
+                </div>
+
+                <div class="options-row">
+                    <label class="remember-me">
+                        <input type="checkbox" name="remember"> Recordarme
+                    </label>
+                    <div class="register-link">
+                        ¿No tienes cuenta? <a th:href="@{/registro}">Regístrate aquí</a>
+                    </div>
+                </div>
+
+                <div class="forgot-row">
+                    <a href="#">Olvide mi contraseña</a>
+                </div>
+
+                <button type="submit" class="btn-submit">Iniciar sesion</button>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

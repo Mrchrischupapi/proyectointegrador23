@@ -1,4 +1,4 @@
-FROM maven:3.8.5-openjdk-17
+FROM maven:3.9.6-eclipse-temurin-21
 WORKDIR /app
 COPY . .
 RUN cd "Proyecto integrador original/proyectointegrador/proyectointegrador" && mvn clean package -DskipTests
